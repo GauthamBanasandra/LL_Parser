@@ -1,3 +1,4 @@
+package main;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -5,7 +6,6 @@ import java.util.regex.Pattern;
 
 import models.Grammar;
 import models.NonTerminal;
-import models.Terminal;
 import models.Symbol;
 
 public class InputParser {
