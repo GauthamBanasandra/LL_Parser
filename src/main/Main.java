@@ -1,5 +1,7 @@
 package main;
 
+import compute.ComputeFirst;
+import compute.ComputeFollow;
 import models.Grammar;
 import models.NonTerminal;
 
@@ -23,9 +25,11 @@ public class Main
         l.add("C1>x C1 | c C1");*/
 
         Grammar grammar = InputParser.parseInput(l);
-//        System.out.println(g.nonTerminals);
+        ComputeFirst first=new ComputeFirst(grammar);
+        ComputeFollow follow=new ComputeFollow(grammar);
 
+        //Debug.
         for (NonTerminal nonTerminal:grammar.nonTerminals)
-            System.out.println(nonTerminal);
+            System.out.println(nonTerminal.val+nonTerminal.getFollow());
     }
 }

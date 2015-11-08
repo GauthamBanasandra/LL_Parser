@@ -1,7 +1,7 @@
 package models;
 
 public abstract class Symbol {
-	final String val;
+	public final String val;
 	public Symbol(String val) {
 		this.val = val;
 	}
