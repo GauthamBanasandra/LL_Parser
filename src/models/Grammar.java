@@ -4,8 +4,8 @@ import java.util.List;
 
 
 public class Grammar {
-	final List<NonTerminal> nonTerminals = new ArrayList<>();
-	final List<Terminal> terminals = new ArrayList<>();
+	public final List<NonTerminal> nonTerminals = new ArrayList<>();
+	public final List<Terminal> terminals = new ArrayList<>();
 	
 	public NonTerminal getNonTerminal(String s) {
 		NonTerminal nt = new NonTerminal(s);
