@@ -47,7 +47,7 @@ public class InputGrammar extends JFrame implements ActionListener
     {
         for(String production:inputGrammarArea.getText().split("\n"))
         {
-            System.out.println(production);
+//            System.out.println(production);
             productions.add(production);
         }
     }
