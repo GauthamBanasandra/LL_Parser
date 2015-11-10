@@ -17,6 +17,7 @@ public class GenerateParsingTable
     private String[] columns;
     private String[][] data;
     private FirstNFollow firstNFollow;
+    private Dictionary<String, ArrayList<String>> firstTable;
 
     public GenerateParsingTable(Grammar grammar)
     {
@@ -25,7 +26,20 @@ public class GenerateParsingTable
 
         init_columns();
         init_rows();
+        compute_values();
         fill_table();
+
+        //Debug.
+        System.out.print("  ");
+        for (int i=0; i<columns.length; ++i)
+            System.out.print(columns[i]+" ");
+        System.out.println();
+        for (int i = 0; i < data.length; i++)
+        {
+            for (int j=0; j<data[i].length; ++j)
+                System.out.print(data[i][j]);
+            System.out.println();
+        }
     }
 
     /*
@@ -38,35 +52,23 @@ public class GenerateParsingTable
         for(int i=0; i<columns.length-1; ++i)
             columns[i]=grammar.terminals.get(i).val;
         columns[columns.length-1]="$";
-
-        //Debug.
-        /*for (int i=0; i<columns.length; ++i)
-            System.out.print(columns[i]);*/
     }
 
     private void init_rows()
     {
         data=new String[grammar.nonTerminals.size()][columns.length];
 
+        for (int i = 0; i < data.length; i++)
+            for (int j=0; j<data[i].length; ++j)
+                data[i][j]="-";
+
         for (int i=0; i<data.length; ++i)
             data[i][0]=grammar.nonTerminals.get(i).val;
-
-        //Debug.
-        /*for (int i = 0; i < data.length; i++)
-        {
-            for (int j=0; j<data[i].length; ++j)
-                System.out.print(data[i][j]);
-            System.out.println();
-        }*/
     }
 
-    private void fill_table()
+    private void compute_values()
     {
-        Dictionary<Terminal, ArrayList<List<Symbol>>> table=new Hashtable<>();
-        Dictionary<String, ArrayList<String>> firstTable=new Hashtable<>();
-
-        for (Terminal terminal:grammar.terminals)
-            table.put(terminal, new ArrayList<List<Symbol>>());
+        firstTable=new Hashtable<>();
 
         for (NonTerminal nonTerminal:grammar.nonTerminals)
             for (List<Symbol> production:nonTerminal.getProduction())
@@ -78,10 +80,7 @@ public class GenerateParsingTable
                 firstTable.put(sProduction, new ArrayList<String>());
 
                 if (grammar.isTerminal(production.get(0)))
-                {
-                    table.get(production.get(0)).add(production);
                     firstTable.get(sProduction).add(production.get(0).val);
-                }
                 else
                 {
                     String first=firstNFollow.fst[grammar.nonTerminals.indexOf(production.get(0))];
@@ -90,7 +89,6 @@ public class GenerateParsingTable
                         for (Terminal terminal:grammar.terminals)
                             if (terminal.val.equals(cterm+""))
                             {
-                                table.get(terminal).add(production);
                                 firstTable.get(sProduction).add(terminal.val);
                                 break;
                             }
@@ -99,7 +97,7 @@ public class GenerateParsingTable
             }
 
         //Debug.
-        Enumeration<String> enumeration=firstTable.keys();
+        /*Enumeration<String> enumeration=firstTable.keys();
         while (enumeration.hasMoreElements())
         {
             String production=enumeration.nextElement();
@@ -107,6 +105,31 @@ public class GenerateParsingTable
             for (String terminal:firstTable.get(production))
                 System.out.print(terminal+" ");
             System.out.println();
+        }*/
+    }
+
+    private void fill_table()
+    {
+        Enumeration<String> productions=firstTable.keys();
+        while (productions.hasMoreElements())
+        {
+            String production=productions.nextElement();
+            String head=production.split("->")[0];
+
+            int rowIndex=0;
+            for (rowIndex=0; rowIndex<data.length; ++rowIndex)
+                if (data[rowIndex][0].equals(head))
+                    break;
+
+            for (String terminal:firstTable.get(production))
+            {
+                int columnIndex=0;
+                for (columnIndex=0; columnIndex<columns.length; ++columnIndex)
+                    if (columns[columnIndex].equals(terminal))
+                        break;
+
+                data[rowIndex][columnIndex+1]=production;
+            }
         }
     }
 }
