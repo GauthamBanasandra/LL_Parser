@@ -1,6 +1,5 @@
 package compute;
 
-import main.FirstNFollow;
 import models.Grammar;
 import models.NonTerminal;
 import models.Symbol;
@@ -16,13 +15,13 @@ public class GenerateParsingTable
     private Grammar grammar;
     private String[] columns;
     private String[][] data;
-    private FirstNFollow firstNFollow;
+    private FirstFollow firstFollow;
     private Dictionary<String, ArrayList<String>> firstTable;
 
     public GenerateParsingTable(Grammar grammar)
     {
         this.grammar = grammar;
-        firstNFollow=new FirstNFollow(grammar);
+        firstFollow =new FirstFollow(grammar);
 
         init_columns();
         init_rows();
@@ -56,7 +55,7 @@ public class GenerateParsingTable
 
     private void init_rows()
     {
-        data=new String[grammar.nonTerminals.size()][columns.length];
+        data=new String[grammar.nonTerminals.size()][columns.length+1];
 
         for (int i = 0; i < data.length; i++)
             for (int j=0; j<data[i].length; ++j)
@@ -83,7 +82,7 @@ public class GenerateParsingTable
                     firstTable.get(sProduction).add(production.get(0).val);
                 else
                 {
-                    String first=firstNFollow.fst[grammar.nonTerminals.indexOf(production.get(0))];
+                    String first= firstFollow.fst[grammar.nonTerminals.indexOf(production.get(0))];
                     for (char cterm:first.toCharArray())
                     {
                         for (Terminal terminal:grammar.terminals)
@@ -124,11 +123,26 @@ public class GenerateParsingTable
             for (String terminal:firstTable.get(production))
             {
                 int columnIndex=0;
-                for (columnIndex=0; columnIndex<columns.length; ++columnIndex)
-                    if (columns[columnIndex].equals(terminal))
-                        break;
+                if (terminal.equals("!"))
+                {
+                    String follow=firstFollow.flw[grammar.nonTerminals.indexOf(grammar.getTerminal(head))];
 
-                data[rowIndex][columnIndex+1]=production;
+                    for (char cfollow:follow.toCharArray())
+                        for (columnIndex=0; columnIndex<columns.length; ++columnIndex)
+                            if (columns[columnIndex].equals(String.valueOf(cfollow)))
+                            {
+                                data[rowIndex][columnIndex+1]=production;
+                                break;
+                            }
+                }
+                else
+                {
+                    for (columnIndex=0; columnIndex<columns.length; ++columnIndex)
+                        if (columns[columnIndex].equals(terminal))
+                            break;
+
+                    data[rowIndex][columnIndex+1]=production;
+                }
             }
         }
     }

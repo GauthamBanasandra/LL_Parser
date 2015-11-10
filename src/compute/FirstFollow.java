@@ -1,4 +1,4 @@
-package main;
+package compute;
 
 /**
  * Created by gauth_000 on 10-Nov-15.
@@ -8,14 +8,14 @@ import models.Symbol;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-public class FirstNFollow
+public class FirstFollow
 {
     static char ntermnl[],termnl[];
     static int ntlen,tlen;
     public static String grmr[][],fst[],flw[];
     private Grammar grammar;
 
-    public FirstNFollow(Grammar grammar)
+    public FirstFollow(Grammar grammar)
     {
         this.grammar=grammar;
 
@@ -63,7 +63,7 @@ public class FirstNFollow
             for(i=0;i<ntlen;i++)
                 flw[i]=follow(i);
             for(i=0;i<ntlen;i++)
-                removeDuplicates(flw[i]);
+                flw[i]=removeDuplicates(flw[i]);
         }
         catch (Exception e) {}
     }
