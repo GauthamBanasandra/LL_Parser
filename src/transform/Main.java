@@ -1,4 +1,4 @@
-package main;
+package transform;
 
 import compute.GenerateParsingTable;
 import models.Grammar;

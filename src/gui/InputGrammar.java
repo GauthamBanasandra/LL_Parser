@@ -1,7 +1,7 @@
 package gui;
 
 import compute.GenerateParsingTable;
-import main.InputParser;
+import transform.InputParser;
 import models.Grammar;
 
 import javax.swing.*;
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 /**
  * Created by gauth_000 on 13-Oct-15.
  */
+
 public class InputGrammar extends JFrame implements ActionListener
 {
     private ArrayList<String> productions;
