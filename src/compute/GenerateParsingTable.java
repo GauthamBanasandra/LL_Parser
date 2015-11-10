@@ -46,31 +46,42 @@ public class GenerateParsingTable
 
     private void correct_table()
     {
-        int epsilonIndex = 0, rowIndex = 0, columnIndex = 0;
-        String[] tempColumns = new String[columns.length];
+        int epsilonIndex = -1, rowIndex = 0, columnIndex = 0;
+        String[] tempColumns = new String[columns.length+1];
 
         tempColumns[0] = " ";
-        for (int i = 0; i < columns.length; ++i)
-            if (!columns[i].equals("!"))
-                tempColumns[++rowIndex] = columns[i];
-            else
-                epsilonIndex = i;
 
-        columns = tempColumns;
-
-        rowIndex = columnIndex = 0;
-        String[][] tempData = new String[data.length][data[0].length - 1];
-
-        for (int i = 0; i < data.length; ++i)
+        if (grammar.terminals.contains(new Terminal("!")))
         {
-            for (int j = 0; j < data[i].length; ++j)
-                if (j != epsilonIndex+1)
-                    tempData[rowIndex][columnIndex++] = data[i][j];
-            ++rowIndex;
-            columnIndex = 0;
-        }
+            for (int i = 0; i < columns.length; ++i)
+                if (!columns[i].equals("!"))
+                    tempColumns[++rowIndex] = columns[i];
+                else
+                    epsilonIndex = i;
 
-        data = tempData;
+            columns = tempColumns;
+
+            rowIndex = columnIndex = 0;
+            String[][] tempData = new String[data.length][data[0].length - 1];
+
+            for (int i = 0; i < data.length; ++i)
+            {
+                for (int j = 0; j < data[i].length; ++j)
+                    if (j != epsilonIndex+1)
+                        tempData[rowIndex][columnIndex++] = data[i][j];
+                ++rowIndex;
+                columnIndex = 0;
+            }
+
+            data = tempData;
+        }
+        else
+        {
+            for (int i = 0; i < columns.length; ++i)
+                    tempColumns[i+1] = columns[i];
+
+            columns = tempColumns;
+        }
     }
 
     /*
