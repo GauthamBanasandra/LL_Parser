@@ -1,7 +1,7 @@
 package models;
 
 public abstract class Symbol {
-	public final String val;
+	public String val;
 	public Symbol(String val) {
 		this.val = val;
 	}
@@ -14,11 +14,5 @@ public abstract class Symbol {
 	@Override
 	public int hashCode() {
 		return 1;
-	}
-
-	@Override
-	public String toString()
-	{
-		return val;
 	}
 }

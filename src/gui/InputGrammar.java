@@ -1,14 +1,23 @@
 package gui;
 
-import compute.GenerateParsingTable;
-import transform.InputParser;
-import models.Grammar;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
+import main.InputParser;
+import main.Normalizer;
+import models.Grammar;
+
+import compute.GenerateParsingTable;
 
 /**
  * Created by gauth_000 on 13-Oct-15.
@@ -58,6 +67,7 @@ public class InputGrammar extends JFrame implements ActionListener
         frame.setLocation(x, y);
     }
 
+
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -65,6 +75,9 @@ public class InputGrammar extends JFrame implements ActionListener
             productions.add(production);
 
         Grammar grammar = InputParser.parseInput(productions);
+        System.out.println(grammar);
+        Normalizer.normalise(grammar);
+        System.out.println(grammar);
         GenerateParsingTable tableGenerator = new GenerateParsingTable(grammar);
         new ParsingTable(tableGenerator.getColumns(), tableGenerator.getData());
 

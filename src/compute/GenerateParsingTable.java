@@ -1,12 +1,17 @@
 package compute;
 
 import gui.ParsingTable;
+
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.List;
+
 import models.Grammar;
 import models.NonTerminal;
 import models.Symbol;
 import models.Terminal;
-
-import java.util.*;
 
 /**
  * Created by gauth_000 on 08-Nov-15.
@@ -23,6 +28,13 @@ public class GenerateParsingTable
     {
         this.grammar = grammar;
         firstFollow = new FirstFollow(grammar);
+
+        System.out.println("first");
+        for (String first:firstFollow.fst)
+            System.out.println(first);
+        System.out.println("follow");
+        for (String follow:firstFollow.flw)
+            System.out.println(follow);
 
         init_columns();
         init_rows();
@@ -47,7 +59,7 @@ public class GenerateParsingTable
     private void correct_table()
     {
         int epsilonIndex = -1, rowIndex = 0, columnIndex = 0;
-        String[] tempColumns = new String[columns.length+1];
+        String[] tempColumns = new String[columns.length + 1];
 
         tempColumns[0] = " ";
 
@@ -67,21 +79,32 @@ public class GenerateParsingTable
             for (int i = 0; i < data.length; ++i)
             {
                 for (int j = 0; j < data[i].length; ++j)
-                    if (j != epsilonIndex+1)
+                    if (j != epsilonIndex + 1)
                         tempData[rowIndex][columnIndex++] = data[i][j];
                 ++rowIndex;
                 columnIndex = 0;
             }
 
             data = tempData;
-        }
-        else
+        } else
         {
             for (int i = 0; i < columns.length; ++i)
-                    tempColumns[i+1] = columns[i];
+                tempColumns[i + 1] = columns[i];
 
             columns = tempColumns;
         }
+
+        int counter=0;
+        for(String terminal:columns)
+            if (terminal!=null)
+                ++counter;
+
+        String[] nonNullColumns=new String[counter];
+        for (int i=0, j=0; i<columns.length; ++i)
+            if (columns[i]!=null)
+                nonNullColumns[j++]=columns[i];
+
+        columns=nonNullColumns;
     }
 
     /*
@@ -113,7 +136,7 @@ public class GenerateParsingTable
         firstTable = new Hashtable<>();
 
         for (NonTerminal nonTerminal : grammar.nonTerminals)
-            for (List<Symbol> production : nonTerminal.getProduction())
+            for (List<Symbol> production : nonTerminal.getProductions())
             {
                 String sProduction = "";
                 for (Symbol symbol : production)

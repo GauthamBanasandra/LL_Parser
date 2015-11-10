@@ -44,26 +44,47 @@ public class FirstFollow
             grmr=new String[ntlen][];
             for(i=0;i<ntlen;i++)
             {
-                n=grammar.nonTerminals.get(i).getProduction().size();
+                n=grammar.nonTerminals.get(i).getProductions().size();
                 grmr[i]=new String[n];
                 for(j=0;j<n;j++)
                 {
                     String production="";
-                    for (Symbol symbol:grammar.nonTerminals.get(i).getProduction().get(j))
+                    for (Symbol symbol:grammar.nonTerminals.get(i).getProductions().get(j))
                         production+=symbol.val;
                     grmr[i][j]=production;
                 }
             }
 
+//            fst=new String[ntlen];
+//            for(i=0;i<ntlen;i++)
+//            {
+//                fst[i]=first(i);
+//            }
+//            for(i=0;i<ntlen;i++)
+//                flw=new String[ntlen];
+//            for(i=0;i<ntlen;i++)
+//                flw[i]=follow(i);
+//            for(i=0;i<ntlen;i++)
+//                flw[i]=removeDuplicates(flw[i]);
+
             fst=new String[ntlen];
             for(i=0;i<ntlen;i++)
                 fst[i]=first(i);
+            System.out.println("First Set");
             for(i=0;i<ntlen;i++)
-                flw=new String[ntlen];
+            {
+                System.out.println(grammar.nonTerminals.get(i)+":"+removeDuplicates(fst[i]));
+                fst[i]=removeDuplicates(fst[i]);
+            }
+            flw=new String[ntlen];
             for(i=0;i<ntlen;i++)
                 flw[i]=follow(i);
+            System.out.println("Follow Set");
             for(i=0;i<ntlen;i++)
+            {
+                System.out.println(grammar.nonTerminals.get(i)+":"+removeDuplicates(flw[i]));
                 flw[i]=removeDuplicates(flw[i]);
+            }
         }
         catch (Exception e) {}
     }
