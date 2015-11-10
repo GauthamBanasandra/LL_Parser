@@ -23,8 +23,8 @@ public class GenerateParsingTable
         this.grammar = grammar;
         firstNFollow=new FirstNFollow(grammar);
 
-        /*init_columns();
-        init_rows();*/
+        init_columns();
+        init_rows();
         fill_table();
     }
 
@@ -35,17 +35,29 @@ public class GenerateParsingTable
     {
         columns=new String[grammar.terminals.size()+1];
 
-        for(int i=0; i<columns.length; ++i)
+        for(int i=0; i<columns.length-1; ++i)
             columns[i]=grammar.terminals.get(i).val;
         columns[columns.length-1]="$";
+
+        //Debug.
+        /*for (int i=0; i<columns.length; ++i)
+            System.out.print(columns[i]);*/
     }
 
     private void init_rows()
     {
-        data=new String[columns.length][grammar.terminals.size()+1];
+        data=new String[grammar.nonTerminals.size()][columns.length];
 
         for (int i=0; i<data.length; ++i)
             data[i][0]=grammar.nonTerminals.get(i).val;
+
+        //Debug.
+        /*for (int i = 0; i < data.length; i++)
+        {
+            for (int j=0; j<data[i].length; ++j)
+                System.out.print(data[i][j]);
+            System.out.println();
+        }*/
     }
 
     private void fill_table()
@@ -90,7 +102,7 @@ public class GenerateParsingTable
             tableValues.put(terminal, new ArrayList<String>());
 
             //Debug.
-            System.out.print(terminal.val + " : ");
+//            System.out.print(terminal.val + " : ");
 
             for (List<Symbol> production:table.get(terminal))
             {
@@ -101,9 +113,20 @@ public class GenerateParsingTable
                 String sNonTerminal="";
                 for (NonTerminal nonTerminal:grammar.nonTerminals)
                 if (nonTerminal.getProduction().contains(production))
-                    System.out.print(nonTerminal.val+"->");
-                System.out.print(sproduction+", ");
+                    tableValues.get(terminal).add(nonTerminal.val+"->"+sproduction);
+//                System.out.print(sproduction+", ");
             }
+//            System.out.println();
+        }
+
+        //Debug.
+        terminals=tableValues.keys();
+        while (terminals.hasMoreElements())
+        {
+            Terminal terminal=terminals.nextElement();
+            System.out.print(terminal.val+" : ");
+            for (String production:tableValues.get(terminal))
+                System.out.print(production + ", ");
             System.out.println();
         }
     }
