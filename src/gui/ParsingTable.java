@@ -7,22 +7,17 @@ import java.awt.*;
  */
 public class ParsingTable extends JFrame
 {
-    public ParsingTable()
+    public ParsingTable(String[] columns, String[][] data)
     {
         super("Parsing table");
-        setSize(300, 100);
+        setSize(700, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBackground(Color.GRAY);
 
         JPanel topPanel=new JPanel(new BorderLayout());
         getContentPane().add(topPanel);
 
-        String[] columns={"\t", "+", "-", "$"};
-        String[][] data=
-                {
-                    {"A", "B>a, C>d", "C>a", "A>1"},
-                    {"B", "D>a", "E>a", "A>a"}
-                };
+
 
         JTable parsingTable=new JTable(data, columns);
         JScrollPane scrollPane=new JScrollPane(parsingTable);
@@ -33,6 +28,12 @@ public class ParsingTable extends JFrame
 
     public static void main(String[] args)
     {
-        new ParsingTable();
+        String[] columns={"\t", "+", "-", "$"};
+        String[][] data=
+                {
+                        {"A", "B>a, C>d", "C>a", "A>1", "a"},
+                        {"B", "D>a", "E>a", "A>a"}
+                };
+        new ParsingTable(columns, data);
     }
 }
