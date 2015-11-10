@@ -18,19 +18,7 @@ public class Main
         l.add("B>* F B | !");
         l.add("F>( E ) | i");
 
-        /*Here's the error - Doesn't work when the head of the production contains more than one character.
-        l.add("C1>x C1 | c C1");*/
-
         Grammar grammar = InputParser.parseInput(l);
-        /*ComputeFirst first=new ComputeFirst(grammar);
-        ComputeFollow follow=new ComputeFollow(grammar);
-*/
         new GenerateParsingTable(grammar);
-        //Debug.
-        /*for (NonTerminal nonTerminal:grammar.nonTerminals)
-            System.out.println(nonTerminal.val+">"+nonTerminal.getProduction());*/
-        /*for (Terminal terminal:grammar.terminals)
-            System.out.print(terminal.val+" ");*/
-
     }
 }

@@ -177,4 +177,14 @@ public class GenerateParsingTable
             }
         }
     }
+
+    public String[] getColumns()
+    {
+        return columns;
+    }
+
+    public String[][] getData()
+    {
+        return data;
+    }
 }
