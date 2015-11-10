@@ -63,6 +63,7 @@ public class GenerateParsingTable
     private void fill_table()
     {
         Dictionary<Terminal, ArrayList<List<Symbol>>> table=new Hashtable<>();
+        Dictionary<String, ArrayList<String>> firstTable=new Hashtable<>();
 
         for (Terminal terminal:grammar.terminals)
             table.put(terminal, new ArrayList<List<Symbol>>());
@@ -70,11 +71,16 @@ public class GenerateParsingTable
         for (NonTerminal nonTerminal:grammar.nonTerminals)
             for (List<Symbol> production:nonTerminal.getProduction())
             {
+                String sProduction="";
+                for (Symbol symbol:production)
+                    sProduction+=symbol;
+                sProduction=nonTerminal.val+"->"+sProduction;
+                firstTable.put(sProduction, new ArrayList<String>());
+
                 if (grammar.isTerminal(production.get(0)))
                 {
-                    ArrayList<List<Symbol>> productions=table.get(production.get(0));
-                    productions.add(production);
-                    table.put((Terminal)production.get(0), productions);
+                    table.get(production.get(0)).add(production);
+                    firstTable.get(sProduction).add(production.get(0).val);
                 }
                 else
                 {
@@ -84,49 +90,22 @@ public class GenerateParsingTable
                         for (Terminal terminal:grammar.terminals)
                             if (terminal.val.equals(cterm+""))
                             {
-                                ArrayList<List<Symbol>> productions=table.get(terminal);
-                                productions.add(production);
-                                table.put(terminal, productions);
+                                table.get(terminal).add(production);
+                                firstTable.get(sProduction).add(terminal.val);
                                 break;
                             }
                     }
                 }
             }
 
-        Dictionary<Terminal, ArrayList<String>> tableValues=new Hashtable<>();
-        Enumeration<Terminal> terminals=table.keys();
-
-        while (terminals.hasMoreElements())
-        {
-            Terminal terminal=terminals.nextElement();
-            tableValues.put(terminal, new ArrayList<String>());
-
-            //Debug.
-//            System.out.print(terminal.val + " : ");
-
-            for (List<Symbol> production:table.get(terminal))
-            {
-                String sproduction="";
-                for (Symbol symbol:production)
-                    sproduction+=symbol.val;
-
-                String sNonTerminal="";
-                for (NonTerminal nonTerminal:grammar.nonTerminals)
-                if (nonTerminal.getProduction().contains(production))
-                    tableValues.get(terminal).add(nonTerminal.val+"->"+sproduction);
-//                System.out.print(sproduction+", ");
-            }
-//            System.out.println();
-        }
-
         //Debug.
-        terminals=tableValues.keys();
-        while (terminals.hasMoreElements())
+        Enumeration<String> enumeration=firstTable.keys();
+        while (enumeration.hasMoreElements())
         {
-            Terminal terminal=terminals.nextElement();
-            System.out.print(terminal.val+" : ");
-            for (String production:tableValues.get(terminal))
-                System.out.print(production + ", ");
+            String production=enumeration.nextElement();
+            System.out.print(production+" : ");
+            for (String terminal:firstTable.get(production))
+                System.out.print(terminal+" ");
             System.out.println();
         }
     }
