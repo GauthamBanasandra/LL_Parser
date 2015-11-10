@@ -9,11 +9,6 @@ import java.util.ArrayList;
  */
 public class InputGrammar extends JFrame implements ActionListener
 {
-    public ArrayList<String> getProductions()
-    {
-        return productions;
-    }
-
     private ArrayList<String> productions;
     private JTextArea inputGrammarArea;
 
@@ -37,9 +32,15 @@ public class InputGrammar extends JFrame implements ActionListener
         setVisible(true);
     }
 
+    public ArrayList<String> getProductions()
+    {
+        return productions;
+    }
+
     public static void main(String[] args)
     {
         new InputGrammar();
+
     }
 
     @Override

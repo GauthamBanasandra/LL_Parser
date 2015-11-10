@@ -27,9 +27,19 @@ public class Grammar
         return t;
     }
 
-    @Override
+    public boolean isNonTerminal(Symbol symbol)
+    {
+        return this.nonTerminals.contains(symbol);
+    }
+
+    public boolean isTerminal(Symbol symbol)
+    {
+        return this.terminals.contains(symbol);
+    }
+
+    /*@Override
     public String toString()
     {
         return "" + nonTerminals;
-    }
+    }*/
 }

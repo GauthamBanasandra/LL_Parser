@@ -45,9 +45,9 @@ public class NonTerminal extends Symbol
         production.add(l);
     }
 
-    @Override
+    /*@Override
     public String toString()
     {
         return val + ":" + production;
-    }
+    }*/
 }

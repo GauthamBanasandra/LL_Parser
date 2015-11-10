@@ -8,9 +8,9 @@ public class Terminal extends Symbol
         super(v);
     }
 
-    @Override
+    /*@Override
     public String toString()
     {
         return "NT: " + val;
-    }
+    }*/
 }
